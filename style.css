@@ -1,0 +1,128 @@
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/opensans.woff2") format("woff2"), url("fonts/opensans.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/opensansbold.woff2") format("woff2"), url("fonts/opensansbold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/opensanslight.woff2") format("woff2"), url("fonts/opensanslight.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Open Sans", Arial, sans-serif;
+  text-align: center;
+
+  color: #1a1a1a;
+}
+
+.container {
+  font-family: "Open Sans", Arial, sans-serif;
+  padding: 2em;
+  margin: auto;
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .form {
+    width: 65%;
+    margin: 0 auto;
+  }
+}
+
+.field-text {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+.field-text__name {
+  width: 100%;
+  display: block;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #d22856;
+  margin-bottom: 1.2em;
+  text-align: left;
+}
+
+.field-text__input {
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.667em;
+  border: 2px solid #e5e5e5;
+  padding: 1.1em;
+}
+
+.field-text__input--error {
+  border: 1px solid red;
+}
+
+.btn {
+  display: inline-block;
+  margin: 0;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: center;
+  font-size: 1em;
+  font-family: inherit;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  background-color: #2aab6d;
+  line-height: 1.667em;
+  border: 1px solid #2aab6d;
+  padding: 1em 2em;
+  color: #ffffff;
+  font-weight: 700;
+  max-width: 300px;
+}
+
+.hidden {
+  display: none;
+}
+
+.result--success {
+  border: 1px solid green;
+}
+
+.result--error {
+  border: 1px solid red;
+}
+
+.result--progress {
+  border: 1px solid yellow;
+}
