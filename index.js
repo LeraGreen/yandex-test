@@ -20,7 +20,12 @@ form.addEventListener('submit', function(evt) {
 
   if (validFlag && !submitButton.hasAttribute('disabled')) {
     submitButton.setAttribute('disabled', 'disabled');
-    sendRequest();
+    const url = form.getAttribute('action');
+    sendRequest(url, function(evt) {
+      console.log(evt);
+      var xhr = evt.target;
+      document.body.innerHTML += '<pre>' + xhr.response + '</pre>';
+    });
   }
 })
 
@@ -61,7 +66,12 @@ class CustomValidation {
   checkPhone() {
     const re = /^\+7\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/;
     const inputValue = this.input.value.replace(/\s+/g, '');
-    return re.test(inputValue);
+    const numbers = inputValue.match(/\d/g);
+    let sum = 0;
+    for (let i = 0; i < numbers.length; i++) {
+      sum += parseInt(numbers[i], 10);
+    }
+    return (re.test(inputValue) && sum <= 30);
   }
 
   setError() {
@@ -79,6 +89,9 @@ class CustomValidation {
 
 // Отправка AJAX запроса //
 
-const sendRequest = () => {
-  
+const sendRequest = (url, callback) => {
+   const xhr = new XMLHttpRequest();
+   xhr.open('GET', url);
+   xhr.onload = callback;
+   xhr.send();
 }
