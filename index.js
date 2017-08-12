@@ -21,10 +21,23 @@ form.addEventListener('submit', function(evt) {
   if (validFlag && !submitButton.hasAttribute('disabled')) {
     submitButton.setAttribute('disabled', 'disabled');
     const url = form.getAttribute('action');
-    sendRequest(url, function(evt) {
-      console.log(evt);
-      var xhr = evt.target;
-      document.body.innerHTML += '<pre>' + xhr.response + '</pre>';
+    sendRequest(url, function(answer) {
+      console.log(answer);
+      const resultContainer = document.getElementById('resultContainer');
+      switch(answer.status) {
+        case 'success':
+          resultContainer.classList.add('success');
+          resultContainer.innerHTML += '<p>' + 'Success' + '<p>';
+          break;
+        case 'error':
+          resultContainer.classList.add('error');
+          resultContainer.innerHTML += '<p>' + answer.reason + '<p>';
+          break;
+        case 'progress':
+          resultContainer.classList.add('progress');
+          break;
+      };
+      resultContainer.classList.remove('hidden');
     });
   }
 })
@@ -92,6 +105,12 @@ class CustomValidation {
 const sendRequest = (url, callback) => {
    const xhr = new XMLHttpRequest();
    xhr.open('GET', url);
-   xhr.onload = callback;
    xhr.send();
+   xhr.onreadystatechange = function() {
+     if (xhr.readyState != 4) {
+       return;
+     }
+     const data = JSON.parse(xhr.responseText);
+     callback(data);
+   }
 }

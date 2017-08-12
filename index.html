@@ -10,7 +10,7 @@
 </head>
 <body>
   <main class="container">
-    <form action="/json/error.json" method="get" class="form" id="myForm">
+    <form action="/json/success.json" method="get" class="form" id="myForm">
       <label class="field-text">
         <span class="field-text__name">Фамилия, Имя, Отчество</span>
         <input class="field-text__input" name="fio" type="text" placeholder="Введите ваше ФИО">
@@ -25,7 +25,7 @@
       </label>
       <button class="btn" type="submit" id="submitButton">Отправить</button>
     </form>
-    <div class="result" id="resultContainer"></div>
+    <div class="result hidden" id="resultContainer"></div>
   </main>
 
   <script src="index.js" charset="utf-8"></script>
