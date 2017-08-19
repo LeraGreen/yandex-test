@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +10,18 @@
 </head>
 <body>
   <main class="container">
-    <form action="/json/success.json" method="get" class="form" id="myForm">
+    <form action="/json/progress.json" method="get" class="form" id="myForm">
       <label class="field-text">
         <span class="field-text__name">Фамилия, Имя, Отчество</span>
-        <input class="field-text__input" name="fio" type="text" placeholder="Введите ваше ФИО">
+        <input class="field-text__input" name="fio" type="text" placeholder="Введите ваше ФИО" required>
       </label>
       <label class="field-text">
         <span class="field-text__name">Email</span>
-        <input class="field-text__input" name="email" type="email" placeholder="Введите вашу почту">
+        <input class="field-text__input" name="email" type="email" placeholder="Введите вашу почту" required>
       </label>
       <label class="field-text">
         <span class="field-text__name">Телефон</span>
-        <input class="field-text__input" name="phone" type="tel" placeholder="Номер в формате +7(999)999-99-99">
+        <input class="field-text__input" name="phone" type="tel" placeholder="Номер в формате +7(999)999-99-99" required>
       </label>
       <button class="btn" type="submit" id="submitButton">Отправить</button>
     </form>

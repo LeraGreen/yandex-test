@@ -1,53 +1,47 @@
-//валидация формы
+class MyForm {
+  constructor() {
+    this.form = document.getElementById('myForm');
+    this.inputs = this.form.getElementsByTagName('input');
+    this.submitButton = document.getElementById('submitButton');
+    this.resultContainer = document.getElementById('resultContainer');
+  }
 
-const form = document.getElementById('myForm');
-form.addEventListener('submit', function(evt) {
-  event.preventDefault();
-  let validFlag = true;
-  const inputs = form.getElementsByTagName('input');
-  const submitButton = document.getElementById('submitButton');
+  initialize() {
+    this.form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.submit();
+    });
+  }
 
-  for (input of inputs) {
-    const inputCustomValidation = new CustomValidation(input);
-    const validationResult = inputCustomValidation.checkInput();
-    if (!validationResult) {
-      validFlag = false;
-      inputCustomValidation.setError();
+  submit(event) {
+    const validation = this.validate();
+    if (!validation.isValid) {
+      this.hideError(validation.errorFields);
+      this.setError(validation.errorFields);
     } else {
-      inputCustomValidation.hideError();
+      this.hideAllError();
+      submitButton.setAttribute('disabled', 'disabled');
+      this.sendRequest((answer) => this.checkAnswer(answer));
     }
   }
 
-  if (validFlag && !submitButton.hasAttribute('disabled')) {
-    submitButton.setAttribute('disabled', 'disabled');
-    const url = form.getAttribute('action');
-    sendRequest(url, function(answer) {
-      console.log(answer);
-      const resultContainer = document.getElementById('resultContainer');
-      switch(answer.status) {
-        case 'success':
-          resultContainer.classList.add('success');
-          resultContainer.innerHTML += '<p>' + 'Success' + '<p>';
-          break;
-        case 'error':
-          resultContainer.classList.add('error');
-          resultContainer.innerHTML += '<p>' + answer.reason + '<p>';
-          break;
-        case 'progress':
-          resultContainer.classList.add('progress');
-          break;
-      };
-      resultContainer.classList.remove('hidden');
-    });
+  validate() {
+    let validateResult = {
+      isValid: true,
+      errorFields: []
+    }
+    for (const input of this.inputs) {
+      const inputCustomValidation = this.checkInput(input);
+      if (!inputCustomValidation) {
+        validateResult.isValid = false;
+        validateResult.errorFields.push(input.name);
+      }
+    }
+    return validateResult;
   }
-})
 
-class CustomValidation {
-  constructor(input) {
+  checkInput(input) {
     this.input = input;
-  }
-
-  checkInput() {
     const inputName = this.input.name;
     let result = false;
     if (inputName === 'fio') {
@@ -70,7 +64,7 @@ class CustomValidation {
 
   checkEmail() {
     const rightHosts = ['ya.ru', 'yandex.ru', 'yandex.ua', 'yandex.by', 'yandex.kz', 'yandex.com'];
-    const inputValue = input.value;
+    const inputValue = this.input.value;
     const atPosition = inputValue.indexOf('@');
     const host = inputValue.slice(atPosition + 1);
     return !(rightHosts.indexOf(host) === -1);
@@ -87,30 +81,90 @@ class CustomValidation {
     return (re.test(inputValue) && sum <= 30);
   }
 
-  setError() {
-    if (!this.input.classList.contains('field-text__input--error')) {
-      this.input.classList.add('field-text__input--error');
+  setError(inputsArray) {
+    for (const errorInput of inputsArray) {
+      for (const input of this.inputs) {
+        if (input.name === errorInput && !input.classList.contains('field-text__input--error')) {
+          input.classList.add('field-text__input--error');
+        }
+      }
     }
   }
 
-  hideError() {
-    if (this.input.classList.contains('field-text__input--error')) {
-      this.input.classList.remove('field-text__input--error');
+  hideError(inputsArray) {
+    for (const errorInput of inputsArray) {
+      for (const input of this.inputs) {
+        if (input.name !== errorInput && input.classList.contains('field-text__input--error')) {
+          input.classList.remove('field-text__input--error');
+        }
+      }
     }
   }
-}
 
-// Отправка AJAX запроса //
+  hideAllError() {
+    for (const input of this.inputs) {
+      if (input.classList.contains('field-text__input--error')) {
+        input.classList.remove('field-text__input--error');
+      }
+    }
+  }
 
-const sendRequest = (url, callback) => {
-   const xhr = new XMLHttpRequest();
-   xhr.open('GET', url);
-   xhr.send();
-   xhr.onreadystatechange = function() {
-     if (xhr.readyState != 4) {
+  sendRequest(callback) {
+    const url = this.form.getAttribute('action');
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.send();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState != 4) {
        return;
-     }
-     const data = JSON.parse(xhr.responseText);
-     callback(data);
-   }
+      }
+      const data = JSON.parse(xhr.responseText);
+      callback(data);
+    }
+  }
+
+  checkAnswer(answer) {
+    switch(answer.status) {
+      case 'success':
+        this.resultContainer.classList.add('success');
+        this.resultContainer.innerHTML += '<p>' + 'Success' + '<p>';
+        break;
+      case 'error':
+        this.resultContainer.classList.add('error');
+        this.resultContainer.innerHTML += '<p>' + answer.reason + '<p>';
+        break;
+      case 'progress':
+        this.resultContainer.classList.add('progress');
+        const timerId = setTimeout(() => {
+          this.sendRequest((answer) => this.checkAnswer(answer));
+        }, answer.timeout);
+        break;
+      };
+    resultContainer.classList.remove('hidden');
+  };
+
+  setData(object) {
+    const inputsNames = ['phone', 'fio', 'email'];
+    for (const input of this.inputs) {
+      for (const name of inputsNames) {
+        if (input.name === name) {
+          input.value = object[name];
+          console.log(input, name, input.value);
+        }
+      }
+    }
+  }
+
+  getData() {
+    const inputsData = {};
+    for (const input of this.inputs) {
+      inputsData[input.name] = input.value;
+    }
+    return inputsData;
+  }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const myForm = new MyForm();
+  myForm.initialize();
+});
