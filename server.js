@@ -21,21 +21,30 @@ const requestHandler = (request, response) => {
     contentType = 'application/js';
   } else if (/\.json$/.test(pURL.pathname)) {
     contentType = 'application/json';
+  } else if (/\.woff$/.test(pURL.pathname)) {
+    contentType = 'application/x-font-woff';
+  } else if (/\.woff2$/.test(pURL.pathname)) {
+    contentType = 'font/woff2';
+  } else if (/\.ico$/.test(pURL.pathname)) {
+    contentType = 'image/x-icon';
   }
-  fs.readFile(filename, 'UTF-8', (err, data) => {
+  fs.readFile(filename, 'binary', (err, data) => {
     if (err) {
       response.writeHead(500, { 'Content-Type': 'text/plain' });
       response.end(JSON.stringify(err, null, 2));
       return;
     }
-    response.writeHead(200, { 'Content-Type': contentType });
-    response.end(data);
+    response.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Length': data.length
+    });
+    response.end(data, 'binary');
   });
 }
 
 const server = http.createServer(requestHandler).listen(port, (err) => {
   if (err) {
-    return console.log('something bad happened', err)
+    return console.error('something bad happened', err)
   }
   console.log(`server is listening on ${port}`)
 })

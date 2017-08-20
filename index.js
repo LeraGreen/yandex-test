@@ -1,12 +1,9 @@
 class MyForm {
-  constructor() {
-    this.form = document.getElementById('myForm');
+  constructor(form) {
+    this.form = form;
     this.inputs = this.form.getElementsByTagName('input');
     this.submitButton = document.getElementById('submitButton');
     this.resultContainer = document.getElementById('resultContainer');
-  }
-
-  initialize() {
     this.form.addEventListener('submit', (event) => {
       event.preventDefault();
       this.submit();
@@ -15,18 +12,17 @@ class MyForm {
 
   submit(event) {
     const validation = this.validate();
+    this.hideAllError();
     if (!validation.isValid) {
-      this.hideError(validation.errorFields);
       this.setError(validation.errorFields);
     } else {
-      this.hideAllError();
       submitButton.setAttribute('disabled', 'disabled');
       this.sendRequest((answer) => this.checkAnswer(answer));
     }
   }
 
   validate() {
-    let validateResult = {
+    const validateResult = {
       isValid: true,
       errorFields: []
     }
@@ -40,45 +36,53 @@ class MyForm {
     return validateResult;
   }
 
-  checkInput(input) {
-    this.input = input;
-    const inputName = this.input.name;
+  static checkInput(input) {
+    const inputName = input.name;
     let result = false;
-    if (inputName === 'fio') {
-      result = this.checkFio();
-    }
-    if (inputName === 'email') {
-      result = this.checkEmail();
-    }
-    if (inputName === 'phone') {
-      result = this.checkPhone();
+    switch(inputName) {
+      case 'fio':
+        result = this.checkFio(input);
+        break;
+      case 'email':
+        result = this.checkEmail(input)
+        break;
+      case 'phone':
+        result = this.checkPhone(input);
+        break;
     }
     return result;
   }
 
-  checkFio() {
+  checkFio(input) {
+    const inputValue = input.value.trim();
     const re = /\s+/;
-    const userFio = this.input.value.split(re);
+    const userFio = inputValue.split(re);
     return userFio.length === 3;
   }
 
-  checkEmail() {
+  checkEmail(input) {
     const rightHosts = ['ya.ru', 'yandex.ru', 'yandex.ua', 'yandex.by', 'yandex.kz', 'yandex.com'];
-    const inputValue = this.input.value;
+    const inputValue = input.value;
     const atPosition = inputValue.indexOf('@');
+    if (atPosition === -1) {
+      return false;
+    }
     const host = inputValue.slice(atPosition + 1);
-    return !(rightHosts.indexOf(host) === -1);
+    return (rightHosts.indexOf(host) !== -1);
   }
 
-  checkPhone() {
+  checkPhone(input) {
     const re = /^\+7\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/;
-    const inputValue = this.input.value.replace(/\s+/g, '');
+    const inputValue = input.value.replace(/\s+/g, '');
+    if (!(re.test(inputValue))) {
+      return false;
+    }
     const numbers = inputValue.match(/\d/g);
     let sum = 0;
     for (let i = 0; i < numbers.length; i++) {
       sum += parseInt(numbers[i], 10);
     }
-    return (re.test(inputValue) && sum <= 30);
+    return (sum <= 30);
   }
 
   setError(inputsArray) {
@@ -86,16 +90,6 @@ class MyForm {
       for (const input of this.inputs) {
         if (input.name === errorInput && !input.classList.contains('field-text__input--error')) {
           input.classList.add('field-text__input--error');
-        }
-      }
-    }
-  }
-
-  hideError(inputsArray) {
-    for (const errorInput of inputsArray) {
-      for (const input of this.inputs) {
-        if (input.name !== errorInput && input.classList.contains('field-text__input--error')) {
-          input.classList.remove('field-text__input--error');
         }
       }
     }
@@ -115,8 +109,8 @@ class MyForm {
     xhr.open('GET', url);
     xhr.send();
     xhr.onreadystatechange = function() {
-      if (xhr.readyState != 4) {
-       return;
+      if (xhr.readyState !== 4) {
+        return;
       }
       const data = JSON.parse(xhr.responseText);
       callback(data);
@@ -127,15 +121,22 @@ class MyForm {
     switch(answer.status) {
       case 'success':
         this.resultContainer.classList.add('success');
-        this.resultContainer.innerHTML += '<p>' + 'Success' + '<p>';
+        this.resultContainer.innerHTML = '<p>' + 'Success' + '</p>';
+        if (this.submitButton.hasAttribute('disabled')) {
+          this.submitButton.removeAttribute('disabled', 'disabled');
+        }
         break;
       case 'error':
         this.resultContainer.classList.add('error');
-        this.resultContainer.innerHTML += '<p>' + answer.reason + '<p>';
+        this.resultContainer.innerHTML = '<p>' + answer.reason + '</p>';
+        if (this.submitButton.hasAttribute('disabled')) {
+          this.submitButton.removeAttribute('disabled', 'disabled');
+        }
         break;
       case 'progress':
         this.resultContainer.classList.add('progress');
-        const timerId = setTimeout(() => {
+        clearTimeout(this.timerId);
+        this.timerId = setTimeout(() => {
           this.sendRequest((answer) => this.checkAnswer(answer));
         }, answer.timeout);
         break;
@@ -149,7 +150,6 @@ class MyForm {
       for (const name of inputsNames) {
         if (input.name === name) {
           input.value = object[name];
-          console.log(input, name, input.value);
         }
       }
     }
@@ -165,6 +165,6 @@ class MyForm {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const myForm = new MyForm();
-  myForm.initialize();
+  const form = document.getElementById('myForm');
+  const myForm = new MyForm(form);
 });
