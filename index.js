@@ -1,3 +1,17 @@
+//TODO проверять и менять классы в диве
+//TODO убирать дизейбл
+//TODO стили сделать
+//TODO бэм проверить
+//TODO линтер поставить глобально
+//TODO фавиконка
+//TODO проверить шрифты
+//TODO проверить все по тз
+//TODO проверить два метода
+//TODO написать ридми
+//TODO проверить пустой ввод
+//TODO искать кнопку по классу
+//TODO server.js
+
 class MyForm {
   constructor(form) {
     this.form = form;
@@ -10,7 +24,7 @@ class MyForm {
     });
   }
 
-  submit(event) {
+  submit() {
     const validation = this.validate();
     this.hideAllError();
     if (!validation.isValid) {
@@ -37,9 +51,8 @@ class MyForm {
   }
 
   static checkInput(input) {
-    const inputName = input.name;
     let result = false;
-    switch(inputName) {
+    switch(input.name) {
       case 'fio':
         result = this.checkFio(input);
         break;
@@ -74,7 +87,7 @@ class MyForm {
   checkPhone(input) {
     const re = /^\+7\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/;
     const inputValue = input.value.replace(/\s+/g, '');
-    if (!(re.test(inputValue))) {
+    if (!re.test(inputValue)) {
       return false;
     }
     const numbers = inputValue.match(/\d/g);
@@ -166,5 +179,7 @@ class MyForm {
 
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('myForm');
-  const myForm = new MyForm(form);
+  if (form !== null) {
+    const myForm = new MyForm(form);
+  }
 });
