@@ -1,15 +1,3 @@
-
-//TODO линтер поставить глобально
-
-//TODO проверить шрифты
-//TODO проверить все по тз
-//TODO проверить два метода
-//TODO написать ридми
-//TODO отправить жене код на проверку
-
-//TODO server.js
-//TODO причесать стили чтобы по стайлгайду
- 
 class MyForm {
   constructor(form) {
     this.form = form;
@@ -212,6 +200,6 @@ class MyForm {
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('myForm');
   if (form !== null) {
-    const myForm = new MyForm(form);
+    window.myForm = new MyForm(form);
   }
 });
