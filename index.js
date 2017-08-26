@@ -1,6 +1,3 @@
-//TODO проверять и менять классы в диве
-//TODO убирать дизейбл
-//TODO стили сделать
 //TODO бэм проверить
 //TODO линтер поставить глобально
 //TODO фавиконка
@@ -8,9 +5,11 @@
 //TODO проверить все по тз
 //TODO проверить два метода
 //TODO написать ридми
+//TODO отправить жене код на проверку
 //TODO проверить пустой ввод
 //TODO искать кнопку по классу
 //TODO server.js
+//TODO причесать стили чтобы по стайлгайду
 
 class MyForm {
   constructor(form) {
@@ -31,7 +30,8 @@ class MyForm {
       this.setError(validation.errorFields);
     } else {
       submitButton.setAttribute('disabled', 'disabled');
-      this.sendRequest((answer) => this.checkAnswer(answer));
+      this.sendRequest(this.getData(), (answer) => this.checkAnswer(answer));
+      this.showResultContainer();
     }
   }
 
@@ -50,7 +50,7 @@ class MyForm {
     return validateResult;
   }
 
-  static checkInput(input) {
+  checkInput(input) {
     let result = false;
     switch(input.name) {
       case 'fio':
@@ -116,10 +116,10 @@ class MyForm {
     }
   }
 
-  sendRequest(callback) {
+  sendRequest(params, callback) {
     const url = this.form.getAttribute('action');
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
+    xhr.open('GET', url + '?' + this.getSearchString(params));
     xhr.send();
     xhr.onreadystatechange = function() {
       if (xhr.readyState !== 4) {
@@ -130,31 +130,37 @@ class MyForm {
     }
   }
 
+  getSearchString(params) {
+    return Object.keys(params).map(function(key) {
+      return [key, encodeURIComponent(params[key])].join('=');
+    }).join('&');
+  }
+
   checkAnswer(answer) {
     switch(answer.status) {
       case 'success':
-        this.resultContainer.classList.add('success');
-        this.resultContainer.innerHTML = '<p>' + 'Success' + '</p>';
+        this.setResultClass('success');
+        this.setResultMessage('Success');
         if (this.submitButton.hasAttribute('disabled')) {
           this.submitButton.removeAttribute('disabled', 'disabled');
         }
         break;
       case 'error':
-        this.resultContainer.classList.add('error');
-        this.resultContainer.innerHTML = '<p>' + answer.reason + '</p>';
+        this.setResultClass('error');
+        this.setResultMessage(answer.reason);
         if (this.submitButton.hasAttribute('disabled')) {
           this.submitButton.removeAttribute('disabled', 'disabled');
         }
         break;
       case 'progress':
-        this.resultContainer.classList.add('progress');
+        this.setResultClass('progress');
+        this.setResultMessage('Отправляем...');
         clearTimeout(this.timerId);
         this.timerId = setTimeout(() => {
-          this.sendRequest((answer) => this.checkAnswer(answer));
+          this.sendRequest(this.getData(), (answer) => this.checkAnswer(answer));
         }, answer.timeout);
         break;
       };
-    resultContainer.classList.remove('hidden');
   };
 
   setData(object) {
@@ -174,6 +180,33 @@ class MyForm {
       inputsData[input.name] = input.value;
     }
     return inputsData;
+  }
+
+  showResultContainer() {
+    if (this.resultContainer.classList.contains('hidden')) {
+      this.resultContainer.classList.remove('hidden');
+    }
+  }
+
+  setResultClass(elClass) {
+    const arrClasses = ['success', 'error', 'progress'];
+    const index = arrClasses.indexOf(elClass);
+    if (index !== -1) {
+      arrClasses.splice(index, 1);
+    }
+    const resultClasses = this.resultContainer.classList;
+    if (!this.resultContainer.classList.contains(elClass)) {
+      this.resultContainer.classList.add(elClass);
+    }
+    for (const item of arrClasses) {
+      if (this.resultContainer.classList.contains(item)) {
+        this.resultContainer.classList.remove(item);
+      }
+    }
+  }
+
+  setResultMessage(text) {
+    this.resultContainer.innerHTML = '<p>' + text + '</p>';
   }
 }
 
