@@ -14,7 +14,7 @@
   });
   myForm.submit();
   setTimeout(() => {
-    myForm.form.action = '/json/success.json';
+    myForm.form.action = 'json/success.json';
   }, 2000);
 ```
 
@@ -27,6 +27,6 @@
   });
   myForm.submit();
   setTimeout(() => {
-    myForm.form.action = '/json/error.json';
+    myForm.form.action = 'json/error.json';
   }, 2000);
 ```
