@@ -16,7 +16,7 @@ class MyForm {
     if (!validation.isValid) {
       this.setError(validation.errorFields);
     } else {
-      submitButton.setAttribute('disabled', 'disabled');
+      this.submitButton.setAttribute('disabled', 'disabled');
       this.sendRequest(this.getData(), (answer) => this.checkAnswer(answer));
       this.showResultContainer();
     }
@@ -26,7 +26,7 @@ class MyForm {
     const validateResult = {
       isValid: true,
       errorFields: []
-    }
+    };
     for (const input of this.inputs) {
       const inputCustomValidation = this.checkInput(input);
       if (!inputCustomValidation) {
@@ -39,12 +39,12 @@ class MyForm {
 
   checkInput(input) {
     let result = false;
-    switch(input.name) {
+    switch (input.name) {
       case 'fio':
         result = this.checkFio(input);
         break;
       case 'email':
-        result = this.checkEmail(input)
+        result = this.checkEmail(input);
         break;
       case 'phone':
         result = this.checkPhone(input);
@@ -72,7 +72,7 @@ class MyForm {
   }
 
   checkPhone(input) {
-    const re = /^\+7\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/;
+    const re = /^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/;
     const inputValue = input.value.replace(/\s+/g, '');
     if (!re.test(inputValue)) {
       return false;
@@ -114,7 +114,7 @@ class MyForm {
       }
       const data = JSON.parse(xhr.responseText);
       callback(data);
-    }
+    };
   }
 
   getSearchString(params) {
@@ -124,7 +124,7 @@ class MyForm {
   }
 
   checkAnswer(answer) {
-    switch(answer.status) {
+    switch (answer.status) {
       case 'success':
         this.setResultClass('success');
         this.setResultMessage('Success');
@@ -147,8 +147,8 @@ class MyForm {
           this.sendRequest(this.getData(), (answer) => this.checkAnswer(answer));
         }, answer.timeout);
         break;
-      };
-  };
+    }
+  }
 
   setData(object) {
     const inputsNames = ['phone', 'fio', 'email'];
@@ -181,7 +181,6 @@ class MyForm {
     if (index !== -1) {
       arrClasses.splice(index, 1);
     }
-    const resultClasses = this.resultContainer.classList;
     if (!this.resultContainer.classList.contains(elClass)) {
       this.resultContainer.classList.add(elClass);
     }

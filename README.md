@@ -30,3 +30,7 @@
     myForm.form.action = 'json/error.json';
   }, 2000);
 ```
+## Lint 
+```sh
+$ eslint --config .eslintrc *.js
+```
