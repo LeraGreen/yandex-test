@@ -1,1 +1,4 @@
-{"status":"progress","timeout": 3000}
+{
+  "status": "progress",
+  "timeout": 600
+}

@@ -31,9 +31,10 @@ body {
 }
 
 .container {
-  font-family: "Open Sans", Arial, sans-serif;
   padding: 2em;
   margin: auto;
+
+  font-family: "Open Sans", Arial, sans-serif;
 }
 
 .form {
@@ -45,29 +46,33 @@ body {
 }
 
 .field-text {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
   margin-bottom: 2em;
 }
 
 .field-text__name {
-  width: 100%;
   display: block;
+  width: 100%;
+  margin-bottom: 1.2em;
+
   font-weight: 700;
+  text-align: left;
+
   text-transform: uppercase;
   color: #d22856;
-  margin-bottom: 1.2em;
-  text-align: left;
 }
 
 .field-text__input {
   width: 100%;
+  padding: 1.1em;
+
   font-size: 16px;
   line-height: 1.667em;
+
   border: 2px solid #e5e5e5;
-  padding: 1.1em;
 }
 
 .field-text__input--error {
@@ -76,27 +81,31 @@ body {
 
 .btn {
   display: inline-block;
+  width: 100%;
+  max-width: 300px;
   margin: 0;
+  padding: 1em 2em;
+
+  font-size: 1em;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  line-height: 1.667em;
+
+  text-decoration: none;
+  text-transform: uppercase;
+  background-color: #2aab6d;
+  border: 1px solid #2aab6d;
+  color: #ffffff;
+
   white-space: nowrap;
   vertical-align: middle;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  text-align: center;
-  font-size: 1em;
-  font-family: inherit;
-  text-decoration: none;
-  text-transform: uppercase;
+
   cursor: pointer;
-  width: 100%;
-  background-color: #2aab6d;
-  line-height: 1.667em;
-  border: 1px solid #2aab6d;
-  padding: 1em 2em;
-  color: #ffffff;
-  font-weight: 700;
-  max-width: 300px;
 }
 
 .btn:disabled {
@@ -109,14 +118,16 @@ body {
 }
 
 .result {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   min-height: 200px;
-  border: 2px solid #e5e5e5;
+
   text-align: center;
+
+  border: 2px solid #e5e5e5;
 }
 
 .result p {
@@ -132,7 +143,7 @@ body {
 }
 
 .progress {
-  border: 1px solid yellow;
+  border: 1px solid orange;
 }
 
 .hidden {

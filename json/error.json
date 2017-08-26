@@ -1,1 +1,4 @@
-{"status":"error","reason": "Что-то пошло не так"}
+{
+  "status": "error",
+  "reason": "Что-то пошло не так"
+}

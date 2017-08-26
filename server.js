@@ -8,7 +8,7 @@ const requestHandler = (request, response) => {
   const pURL = url.parse(request.url);
   const filename = path.join(__dirname, pURL.pathname);
   if (filename.indexOf(__dirname) !== 0) {
-    response.writeHead(403, { 'Content-Type': 'text/plain' });
+    response.writeHead(403, {'Content-Type': 'text/plain'});
     response.end('Forbidden');
     return;
   }
@@ -30,7 +30,7 @@ const requestHandler = (request, response) => {
   }
   fs.readFile(filename, 'binary', (err, data) => {
     if (err) {
-      response.writeHead(500, { 'Content-Type': 'text/plain' });
+      response.writeHead(500, {'Content-Type': 'text/plain'});
       response.end(JSON.stringify(err, null, 2));
       return;
     }
@@ -40,11 +40,11 @@ const requestHandler = (request, response) => {
     });
     response.end(data, 'binary');
   });
-}
+};
 
-const server = http.createServer(requestHandler).listen(port, (err) => {
+http.createServer(requestHandler).listen(port, (err) => {
   if (err) {
-    return console.error('something bad happened', err)
+    return console.error('something bad happened', err);
   }
-  console.log(`server is listening on ${port}`)
-})
+  console.log(`server is listening on ${port}`);
+});
