@@ -1,21 +1,14 @@
 @font-face {
   font-family: "Open Sans";
-  src: url("fonts/opensans.woff2") format("woff2"), url("fonts/opensans.woff") format("woff");
+  src: url("../fonts/opensans.woff2") format("woff2"), url("../fonts/opensans.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Open Sans";
-  src: url("fonts/opensansbold.woff2") format("woff2"), url("fonts/opensansbold.woff") format("woff");
+  src: url("../fonts/opensansbold.woff2") format("woff2"), url("../fonts/opensansbold.woff") format("woff");
   font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Open Sans";
-  src: url("fonts/opensanslight.woff2") format("woff2"), url("fonts/opensanslight.woff") format("woff");
-  font-weight: 300;
   font-style: normal;
 }
 
@@ -30,6 +23,7 @@ body {
 
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.2em;
   font-family: "Open Sans", Arial, sans-serif;
   text-align: center;
 
@@ -47,13 +41,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-}
-
-@media (min-width: 960px) {
-  .form {
-    width: 65%;
-    margin: 0 auto;
-  }
+  margin-bottom: 40px;
 }
 
 .field-text {
@@ -111,18 +99,55 @@ body {
   max-width: 300px;
 }
 
+.btn:disabled {
+  background-color: #9eda9e;
+  cursor: default;
+}
+
 .hidden {
   display: none;
 }
 
-.result--success {
+.result {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 2px solid #e5e5e5;
+  text-align: center;
+}
+
+.result p {
+  font-size: 16px;
+}
+
+.success {
   border: 1px solid green;
 }
 
-.result--error {
+.error {
   border: 1px solid red;
 }
 
-.result--progress {
+.progress {
   border: 1px solid yellow;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .form {
+    width: 65%;
+    margin: 0 auto;
+    margin-bottom: 40px;
+  }
+
+  .result {
+    width: 65%;
+    margin: 0 auto;
+  }
 }

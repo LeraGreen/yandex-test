@@ -1,32 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="normalize.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
   <title>Тестовое задание для Школы Node.js</title>
 </head>
 <body>
   <main class="container">
-    <form action="" method="get" class="form" id="myForm">
+    <form action="/json/error.json" method="get" class="form" id="myForm">
       <label class="field-text">
         <span class="field-text__name">Фамилия, Имя, Отчество</span>
-        <input class="field-text__input" name="fio" type="text" placeholder="Введите ваше ФИО">
+        <input class="field-text__input" name="fio" type="text" placeholder="Введите ваше ФИО" required>
       </label>
       <label class="field-text">
         <span class="field-text__name">Email</span>
-        <input class="field-text__input" name="email" type="email" placeholder="Введите вашу почту">
+        <input class="field-text__input" name="email" type="text" placeholder="Введите вашу почту" required>
       </label>
       <label class="field-text">
         <span class="field-text__name">Телефон</span>
-        <input class="field-text__input" name="phone" type="tel" placeholder="Введите номер телефона">
+        <input class="field-text__input" name="phone" type="tel" placeholder="Формат +7(999)999-99-99" required>
       </label>
       <button class="btn" type="submit" id="submitButton">Отправить</button>
     </form>
-    <div class="result" id="resultContainer"></div>
+    <div class="result success" id="resultContainer">
+    </div>
   </main>
 
+  <script src="index.js" charset="utf-8"></script>
 </body>
 </html>
