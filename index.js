@@ -17,7 +17,7 @@ class MyForm {
       this.setError(validation.errorFields);
     } else {
       this.submitButton.setAttribute('disabled', 'disabled');
-      this.sendRequest(this.getData(), (answer) => this.checkAnswer(answer));
+      this.sendRequest(this.getData(), (error, answer) => this.checkAnswer(error, answer));
       this.showResultContainer();
     }
   }
@@ -112,8 +112,13 @@ class MyForm {
       if (xhr.readyState !== 4) {
         return;
       }
-      const data = JSON.parse(xhr.responseText);
-      callback(data);
+      if (xhr.status !== 200) {
+        const error = 'Status ' + xhr.status;
+        callback(error);
+      } else {
+        const data = JSON.parse(xhr.responseText);
+        callback(null, data);
+      }
     };
   }
 
@@ -123,30 +128,50 @@ class MyForm {
     }).join('&');
   }
 
-  checkAnswer(answer) {
+  checkAnswer(error, answer) {
+    const result = {
+      className: null,
+      message: null,
+      disabled: true
+    }
+
+    if (error !== null) {
+      result.className = 'error';
+      result.message = error;
+      result.disabled = false;
+      this.setResult(result);
+      return;
+    }
+
     switch (answer.status) {
       case 'success':
-        this.setResultClass('success');
-        this.setResultMessage('Success');
-        if (this.submitButton.hasAttribute('disabled')) {
-          this.submitButton.removeAttribute('disabled', 'disabled');
-        }
+        result.className = answer.status;
+        result.message = 'Success';
+        result.disabled = true;
         break;
       case 'error':
-        this.setResultClass('error');
-        this.setResultMessage(answer.reason);
-        if (this.submitButton.hasAttribute('disabled')) {
-          this.submitButton.removeAttribute('disabled', 'disabled');
-        }
+        result.className = answer.status;
+        result.message = answer.reason;
+        result.disabled = false;
         break;
       case 'progress':
-        this.setResultClass('progress');
-        this.setResultMessage('Отправляем...');
+        result.className = answer.status;
+        result.message = 'Отправляем...';
+        result.disabled = true;
         clearTimeout(this.timerId);
         this.timerId = setTimeout(() => {
-          this.sendRequest(this.getData(), (answer) => this.checkAnswer(answer));
+          this.sendRequest(this.getData(), (error, answer) => this.checkAnswer(error, answer));
         }, answer.timeout);
         break;
+    }
+    this.setResult(result);
+  }
+
+  setResult(data) {
+    this.setResultClass(data.className);
+    this.setResultMessage(data.message);
+    if (!data.disabled && this.submitButton.hasAttribute('disabled')) {
+        this.submitButton.removeAttribute('disabled', 'disabled');
     }
   }
 
