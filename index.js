@@ -116,7 +116,7 @@ class MyForm {
         const error = {
           status: xhr.status,
           message: 'HTTP Error: code ' + xhr.status
-        }
+        };
         return callback(error);
       }
       const data = JSON.parse(xhr.responseText);
