@@ -113,12 +113,14 @@ class MyForm {
         return;
       }
       if (xhr.status !== 200) {
-        const error = 'Status ' + xhr.status;
-        callback(error);
-      } else {
-        const data = JSON.parse(xhr.responseText);
-        callback(null, data);
+        const error = {
+          status: xhr.status,
+          message: 'HTTP Error: code ' + xhr.status
+        }
+        return callback(error);
       }
+      const data = JSON.parse(xhr.responseText);
+      return callback(null, data);
     };
   }
 
@@ -133,11 +135,11 @@ class MyForm {
       className: null,
       message: null,
       disabled: true
-    }
+    };
 
     if (error !== null) {
       result.className = 'error';
-      result.message = error;
+      result.message = error.message;
       result.disabled = false;
       this.setResult(result);
       return;
@@ -171,7 +173,9 @@ class MyForm {
     this.setResultClass(data.className);
     this.setResultMessage(data.message);
     if (!data.disabled && this.submitButton.hasAttribute('disabled')) {
-        this.submitButton.removeAttribute('disabled', 'disabled');
+      this.submitButton.removeAttribute('disabled', 'disabled');
+    } else if (data.disabled && !this.submitButton.hasAttribute('disabled')) {
+      this.submitButton.setAttribute('disabled', 'disabled');
     }
   }
 

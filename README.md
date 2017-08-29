@@ -1,7 +1,7 @@
 # yandex-test
 Тестовое задание для Школы Node.js
 
-## Запуск сервера для статики: `npm start` или `PORT=3000; npm start`
+## Запуск сервера для статики: `npm start` или `PORT=3000 npm start`
 
 ## Тест
 
@@ -30,7 +30,7 @@
     myForm.form.action = 'json/error.json';
   }, 2000);
 ```
-## Lint 
+## Lint
 ```sh
 $ eslint --config .eslintrc *.js
 ```
